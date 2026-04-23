@@ -28,6 +28,12 @@ public class Account {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Column(nullable = false, precision = 19, scale = 4)
     private BigDecimal balance;
 
