@@ -1,7 +1,9 @@
 package com.mercado.pagos.service;
 
 import com.mercado.pagos.dto.AuthResponseDto;
+import com.mercado.pagos.dto.LoginRequestDto;
 import com.mercado.pagos.dto.RegisterRequestDto;
+import com.mercado.pagos.exception.InvalidCredentialsException;
 import com.mercado.pagos.model.Account;
 import com.mercado.pagos.model.Role;
 import com.mercado.pagos.security.JwtService;
@@ -48,6 +50,23 @@ public class AuthService {
                 .build();
 
 
+    }
+
+    public AuthResponseDto login (LoginRequestDto dto) {
+
+        Account account = accountService.findByEmail(dto.getEmail());
+
+        if (!passwordEncoder.matches(dto.getPassword(), account.getPassword()))
+            throw new InvalidCredentialsException("Invalid email or password");
+
+        String token = jwtService.generateToken(account);
+
+        return AuthResponseDto.builder()
+                .token(token)
+                .name(account.getName())
+                .email(account.getEmail())
+                .balance(account.getBalance())
+                .build();
     }
 
 }
