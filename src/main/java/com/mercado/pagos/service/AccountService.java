@@ -1,5 +1,6 @@
 package com.mercado.pagos.service;
 
+import com.mercado.pagos.dto.AuthResponseDto;
 import com.mercado.pagos.exception.DuplicateEmailException;
 import com.mercado.pagos.exception.InvalidCredentialsException;
 import com.mercado.pagos.model.Account;
@@ -26,6 +27,14 @@ public class AccountService {
     public Account findByEmail(String email) {
         return accountRepository.findByEmail(email)
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
+    }
+
+    public AuthResponseDto getMe(Account account) {
+        return AuthResponseDto.builder()
+                .name(account.getName())
+                .email(account.getEmail())
+                .balance(account.getBalance())
+                .build();
     }
 
 }
